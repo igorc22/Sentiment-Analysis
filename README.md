@@ -2,10 +2,10 @@
 
 ### Software and Tools Requirements
 
-1. [VsCode]()
-2. [GithUB Account]()
-3. [Heroku Account]()
-4. [Git CLI]()
+1. [VsCode](https://code.visualstudio.com/)
+2. [GithUB Account](https://github.com/)
+3. [Heroku Account](https://heroku.com/)
+4. [Git CLI](https://git-scm.com/book/en/v2/Getting-Started-The-Command-Line)
 
 Create a new environment
 
