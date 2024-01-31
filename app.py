@@ -6,8 +6,8 @@ import pandas as pd
 app=Flask(__name__)
 
 ## Load the model
-sentiment_model=pickle.load(open('.pkl','rb'))
-preprocess_function = pickle.load(open(' .pkl', 'rb'))
+sentiment_model= pickle.load(open('Logistic_Regression_model.pkl','rb'))
+preprocess_function = pickle.load(open('preprocess_text.pkl', 'rb'))
 
 @app.route('/')
 def home():
@@ -17,7 +17,7 @@ def home():
 def predict_api():
     data=request.json['data']
     print(data)
-    new_data = preprocess_function.preprocess(data)
+    new_data = preprocess_function(data)
     output= sentiment_model.predict(new_data)
     print(output[0])
     return jsonify(output[0])
