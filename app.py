@@ -1,16 +1,25 @@
 import pickle
+import re
 from flask import Flask,request,app,jsonify,url_for,render_template
 import numpy as np
 import pandas as pd
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
 
 app=Flask(__name__)
 
 ## Load the model
 sentiment_model= pickle.load(open('Logistic_Regression_model.pkl','rb'))
 
-# Preprocess Function
+## Load the Term Of Frequency Model
+
+term_of_frequency = pickle.load(open('tfvectorizer.pkl','rb'))
+
+## Preprocess Function
 
 def preprocess_text(text):
+    
     
     # Removendo caracteres especiais
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
@@ -43,10 +52,29 @@ def home():
 def predict_api():
     data=request.json['data']
     print(data)
-    new_data = preprocess_text(data)
-    output= sentiment_model.predict(new_data)
-    print(output[0])
-    return jsonify(output[0])
+    processed_data = preprocess_text(data)
+    print(processed_data)
+    data_text = ' '.join(processed_data)
+    print(data_text)
+    data_vectorized = term_of_frequency.transform([data_text])
+    output= sentiment_model.predict(data_vectorized)
+    predicted_result = float(output[0])
+    print(predicted_result)
+    return jsonify(predicted_result)
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    user_input = request.form['user_input']
+    processed_data = preprocess_text(user_input)
+    data_text = ' '.join(processed_data)
+    data_vectorized = term_of_frequency.transform([data_text])
+    output = sentiment_model.predict(data_vectorized)
+    predicted_result = float(output[0])
+
+    sentiment_label = "Positive" if predicted_result == 1 else "Negative"
+
+    return render_template('home.html', prediction_text="Sentiment Analysis Result: {}".format(sentiment_label),  predicted_result=sentiment_label)
+
 
 if __name__=="__main__":
     app.run(debug=True)

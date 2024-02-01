@@ -1,3 +1,81 @@
-<h1>
-Hello World
-</h1>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+  <style>
+    body {
+      text-align: center;
+    }
+
+    .login {
+      width: 300px;
+      height: 200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .prediction-text {
+      font-size: 18px;
+      margin-top: 40px;
+    }
+
+    .prediction-positive {
+      color: green;
+    }
+
+    .prediction-negative {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login">
+    <h1>Sentiment Analysis</h1>
+
+    <form action="{{ url_for('predict') }}" method="post">
+      <!-- Input for machine learning model -->
+      <textarea name="user_input" placeholder="Input your review" required="required"></textarea><br>
+
+      <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+    <br>
+    <br>
+  </div>
+
+  {% if predicted_result is defined %}
+    <div class="prediction-text {{ 'prediction-positive' if predicted_result == 'Positive' else 'prediction-negative' }}">
+      {{'Sentiment Analysis Result: ' + predicted_result}}
+    </div>
+  {% endif %}
+</body>
+
+</html>
